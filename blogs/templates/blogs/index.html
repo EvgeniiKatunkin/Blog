@@ -4,11 +4,16 @@
 
     <p>Posts:</p>
 
+    <a href="{% url 'blogs:new_post' %}">Add a new post:</a>
+
     <ul>
         {% for post in posts %}
             <li>
                 <p><b>{{ post.date_added }}: {{ post.title }}.</b></p>
                 <p>{{ post.text|linebreaks }}</p><br>
+                <p>
+                    <a href="{% url 'blogs:edit_post' post.id %}">edit post</a>
+                </p>
             </li>
         {% empty %}
             <li>No posts have been added yet.</li>
