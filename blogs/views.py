@@ -37,10 +37,10 @@ def edit_post(request, post_id):
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current post.
-        form = BlogPost(instance=post)
+        form = PostForm(instance=post)
     else:
         # POST data submitted; process data.
-        form = BlogPost(instance=post, data=request.POST)
+        form = PostForm(instance=post, data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('blogs:index'))
