@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import BlogPost
 from .forms import PostForm
@@ -13,6 +14,7 @@ def index(request):
     return render(request, 'blogs/index.html', context)
 
 
+@login_required
 def new_post(request):
     """Add a new post."""
     if request.method != 'POST':
@@ -22,18 +24,20 @@ def new_post(request):
         # POST data submitted; process data.
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_post = form.save(commit=False)
+            new_post.owner = request.user
+            new_post.save('new_post')
             return HttpResponseRedirect(reverse('blogs:index'))
 
     context = {'form': form}
     return render(request, 'blogs/new_post.html', context)
 
 
+@login_required
 def edit_post(request, post_id):
     """Edit an existing post."""
     post = BlogPost.objects.get(id=post_id)
-    title = post.title
-    text = post.text
+    check_post_owner(request, post)
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current post.
@@ -45,5 +49,11 @@ def edit_post(request, post_id):
             form.save()
             return HttpResponseRedirect(reverse('blogs:index'))
 
-    context = {'title': title, 'text': text, 'form': form, 'post': post}
+    context = {'form': form, 'post': post}
     return render(request, 'blogs/edit_post.html', context)
+
+
+def check_post_owner(request, post):
+    # Make sure the post belong to the current user.
+    if post.owner != request.user:
+        raise Http404

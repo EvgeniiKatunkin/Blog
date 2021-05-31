@@ -9,7 +9,7 @@
     <ul>
         {% for post in posts %}
             <li>
-                <p><b>{{ post.date_added }}: {{ post.title }}.</b></p>
+                <p><b>{{ post.owner }} ({{ post.date_added }}): {{ post.title }}.</b></p>
                 <p>{{ post.text|linebreaks }}</p>
                 <p>
                     <a href="{% url 'blogs:edit_post' post.id %}">edit post</a>
