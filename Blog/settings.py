@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Third party apps
+    'bootstrap3',
+    
     # My apps
     'blogs',
     'users',
@@ -130,7 +133,11 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # My settings
 LOGIN_REDIRECT_URL = '../../'
 LOGIN_URL = '/users/login/'
+
+# Settings for django-bootstrap3
+BOOTSTRAP3 = {
+    'include_jquery': True,
+}
