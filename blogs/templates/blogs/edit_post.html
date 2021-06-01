@@ -1,13 +1,20 @@
 {% extends 'blogs/base.html' %}
+{% load bootstrap3 %}
+
+{% block header %}
+    Edit post:
+{% endblock header %}
 
 {% block content %}
 
-    <p>Edit post:</p>
+    <form method="post" action="{% url 'blogs:edit_post' post.id %}" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
 
-    <form action="{% url 'blogs:edit_post' post.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">save changes</button>
+        {% buttons %}
+            <button name="submit" class="btn btn-primary">save changes</button>
+        {% endbuttons %}
+
     </form>
 
 {% endblock content %}

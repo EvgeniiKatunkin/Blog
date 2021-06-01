@@ -1,23 +1,37 @@
 {% extends "blogs/base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+    <div class="jumbotron">
+        <h1 style="text-align: center">A shared blog</h1>
+    </div>
+{% endblock header %}
 
 {% block content %}
 
-    <p>Posts:</p>
+    <h2><a href="{% url 'blogs:new_post' %}">Add a new post</a></h2><br>
 
-    <a href="{% url 'blogs:new_post' %}">Add a new post:</a>
+    <h2>Posts:</h2>
 
-    <ul>
-        {% for post in posts %}
-            <li>
-                <p><b>{{ post.owner }} ({{ post.date_added }}): {{ post.title }}.</b></p>
-                <p>{{ post.text|linebreaks }}</p>
-                <p>
-                    <a href="{% url 'blogs:edit_post' post.id %}">edit post</a>
-                </p>
-                <br>
-            </li>
-        {% empty %}
-            <li>No posts have been added yet.</li>
-        {% endfor %}
-    </ul>
+    {% for post in posts %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>
+                    {{ post.owner }}
+                    ({{ post.date_added|date:'M d, Y H:i' }}):
+                    {{ post.title }}
+                    <small>
+                        <a href="{% url 'blogs:edit_post' post.id %}">
+                            edit post
+                        </a>
+                    </small>
+                </h3>
+            </div>
+            <div class="panel-body">
+                {{ post.text|linebreaks }}
+            </div>
+        </div><!-- panel -->
+    {% empty %}
+        No posts have been added yet.
+    {% endfor %}
 {% endblock content %}
